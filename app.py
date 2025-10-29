@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
+from PIL import Image
+import secrets
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -491,9 +493,10 @@ with app.app_context():
         print("Default admin user created: admin@auction.com / admin123")
   
 if __name__ == '__main__':
-# Export models for create_sample_data.py
+    # Export models for create_sample_data.py
     __all__ = ['app', 'db', 'User', 'Product', 'Category', 'Bid']
     
+    port = int(os.environ.get('PORT', 8000))
     print("🚀 Starting Auction Application...")
-    print("📊 Initializing MySQL Database...")
-app.run(debug=True)
+    print("📊 Initializing SQLite Database...")
+    app.run(host='0.0.0.0', port=port)
