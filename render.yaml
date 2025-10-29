@@ -2,13 +2,11 @@ services:
   - type: web
     name: auction-app
     env: python
+    pythonVersion: 3.12
     buildCommand: |
-      apt-get update && apt-get install -y python3-dev zlib1g-dev libjpeg-dev libpng-dev
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.9.12
       - key: PORT
         value: 8000
