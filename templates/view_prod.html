@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Auction App{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-lg-6">
+            <div class="card">
+                {% if product.image_url %}
+                <img src="{{ url_for('static', filename=product.image_url) }}" 
+                     class="card-img-top" alt="{{ product.name }}" style="max-height: 500px; object-fit: contain;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                     style="height: 400px;">
+                    <i class="fas fa-image fa-5x text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Product Details -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="h3 card-title">{{ product.name }}</h1>
+                    <p class="text-muted">Listed by {{ product.seller.username }}</p>
+                    
+                    <div class="mb-4">
+                        <span class="badge bg-primary">{{ product.category.name }}</span>
+                        {% if product.is_auction_active %}
+                        <span class="badge bg-success">Active</span>
+                        {% else %}
+                        <span class="badge bg-danger">Ended</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="price-section mb-4">
+    <div class="d-flex align-items-baseline gap-3">
+        <span class="h2 text-primary">₹{{ "%.2f"|format(product.current_price) }}</span>
+        <small class="text-muted">Starting: ₹{{ "%.2f"|format(product.starting_price) }}</small>
+    </div>
+    <small class="text-muted">{{ product.bids.count() }} bids placed</small>
+</div>
+
+<!-- Also update the bid form minimum bid text: -->
+<small class="form-text text-muted">
+    Minimum bid: ₹{{ "%.2f"|format(product.current_price + 1) }}
+</small>
+
+<!-- Update bidding history: -->
+{% for bid in product.bids %}
+<div class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+        <strong>₹{{ "%.2f"|format(bid.amount) }}</strong>
+        <small class="text-muted ms-2">by {{ bid.bidder.username }}</small>
+    </div>
+    <small class="text-muted">{{ bid.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+</div>
+{% endfor %}
+                    
+                    <!-- Time Remaining -->
+                    {% if product.time_remaining %}
+                    <div class="alert alert-warning">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-clock me-2"></i>
+                            <div>
+                                <strong>Time Remaining:</strong><br>
+                                {{ product.time_remaining.days }} days, 
+                                {{ (product.time_remaining.seconds // 3600) }} hours,
+                                {{ (product.time_remaining.seconds % 3600) // 60 }} minutes
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        This auction has ended
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Bid Form -->
+                    {% if current_user.is_authenticated and product.is_auction_active and current_user.id != product.seller_id %}
+                    <form id="bidForm" class="mb-4">
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="bidAmount" 
+                                   step="0.01" 
+                                   min="{{ product.current_price + 1 }}" 
+                                   value="{{ product.current_price + 1 }}" 
+                                   required>
+                            <button class="btn btn-primary" type="submit">Place Bid</button>
+                        </div>
+                        <small class="form-text text-muted">
+                            Minimum bid: ${{ "%.2f"|format(product.current_price + 1) }}
+                        </small>
+                    </form>
+                    {% elif not current_user.is_authenticated %}
+                    <div class="alert alert-info">
+                        <a href="{{ url_for('login') }}" class="alert-link">Login</a> to place a bid
+                    </div>
+                    {% elif current_user.id == product.seller_id %}
+                    <div class="alert alert-info">
+                        You cannot bid on your own product
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Product Description -->
+                    <div class="product-description mt-4">
+                        <h5>Description</h5>
+                        <p class="card-text">{{ product.description|replace('\n', '<br>')|safe }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bidding History -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Bidding History</h5>
+                </div>
+                <div class="card-body">
+                    {% if product.bids.count() > 0 %}
+                    <div class="list-group list-group-flush">
+                        {% for bid in product.bids %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${{ "%.2f"|format(bid.amount) }}</strong>
+                                <small class="text-muted ms-2">by {{ bid.bidder.username }}</small>
+                            </div>
+                            <small class="text-muted">{{ bid.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No bids yet. Be the first to bid!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('bidForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('bid_amount', document.getElementById('bidAmount').value);
+    
+    try {
+        const response = await fetch('{{ url_for("place_bid", product_id=product.id) }}', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Bid placed successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        alert('Error placing bid. Please try again.');
+    }
+});
+</script>
+{% endblock %}

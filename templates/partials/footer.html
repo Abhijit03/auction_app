@@ -1,0 +1,64 @@
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-gavel me-2"></i>AuctionApp
+                </h5>
+                <p class="text-muted">
+                    Your trusted platform for online auctions. Buy and sell unique items with confidence.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white-50"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#" class="text-white-50"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#" class="text-white-50"><i class="fab fa-instagram fa-lg"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="fw-bold">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('home') }}" class="text-muted text-decoration-none">Home</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Contact</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h6 class="fw-bold">Categories</h6>
+                <ul class="list-unstyled">
+                    {% for category in categories[:4] %}
+                    <li class="mb-2">
+                        <a href="{{ url_for('products_by_category', category_id=category.id) }}" 
+                           class="text-muted text-decoration-none">
+                            {{ category.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="col-lg-3 mb-4">
+                <h6 class="fw-bold">Contact Info</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="mb-2"><i class="fas fa-envelope me-2"></i>support@auctionapp.com</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</li>
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>123 Auction St, City</li>
+                </ul>
+            </div>
+        </div>
+        
+        <hr class="my-4 bg-secondary">
+        
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="text-muted mb-0">&copy; 2024 AuctionApp. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-muted text-decoration-none me-3">Privacy Policy</a>
+                <a href="#" class="text-muted text-decoration-none">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

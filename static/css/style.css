@@ -1,0 +1,269 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --light-bg: #f8f9fa;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+/* Custom Cards */
+.hover-shadow {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.product-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.category-card .card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.category-card:hover .card {
+    border-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* Special Categories Styles */
+.special-category-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.special-category-card:hover {
+    transform: translateY(-5px);
+    border-color: #007bff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.category-meta {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+/* Progress bars for category distribution */
+.progress {
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.progress-bar {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 4px;
+}
+
+/* Featured category highlight */
+.table-warning {
+    background-color: #fff3cd !important;
+}
+
+/* Database stats cards */
+.border.rounded.p-3 {
+    transition: all 0.3s ease;
+}
+
+.border.rounded.p-3:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Time Remaining */
+.time-remaining {
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    margin: 0 5px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    background: var(--light-bg);
+    border-bottom: 1px solid #eee;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: var(--success-color);
+}
+
+.alert-danger {
+    border-left-color: var(--accent-color);
+}
+
+.alert-warning {
+    border-left-color: var(--warning-color);
+}
+
+.alert-info {
+    border-left-color: var(--secondary-color);
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Table */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background: var(--light-bg);
+    border: none;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.table td {
+    border-color: #f1f3f4;
+    vertical-align: middle;
+}
+
+/* Modal */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+    background: var(--light-bg);
+    border-radius: 12px 12px 0 0;
+}
+
+/* Footer */
+footer {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease;
+}
+
+/* Price animation */
+.price-change {
+    animation: pricePulse 0.6s ease;
+}
+
+@keyframes pricePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Indian Rupee Symbol Styling */
+.text-primary {
+    color: #138808 !important; /* Indian green for prices */
+}
+
+.rupee-symbol {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+/* Price emphasis */
+.h5.text-primary, .h2.text-primary {
+    font-weight: 700;
+}

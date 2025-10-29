@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Database Information & Categories - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Database Information & Platform Categories</h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <!-- Platform Categories Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Unique Categories - Platform Overview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Why It Matters</th>
+                                    <th>Status</th>
+                                    <th>Products</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Food & Homemade Products</strong>
+                                        <br><small class="text-muted">Home-based sellers platform</small>
+                                    </td>
+                                    <td>Home-based sellers get a digital platform</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>15 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Tools & Machinery</strong>
+                                        <br><small class="text-muted">B2C Tools Marketplace</small>
+                                    </td>
+                                    <td>OLX doesn't allow; Indiamart is too B2B-heavy</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>28 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Events & Rentals</strong>
+                                        <br><small class="text-muted">Wedding & Party Rentals</small>
+                                    </td>
+                                    <td>Huge demand for wedding/party rental items</td>
+                                    <td><span class="badge bg-warning">Growing</span></td>
+                                    <td>42 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Industrial & Wholesale</strong>
+                                        <br><small class="text-muted">MET Bhujbal Knowledge City</small>
+                                    </td>
+                                    <td>Merges retail & bulk; ideal for small manufacturers</td>
+                                    <td><span class="badge bg-info">Partner</span></td>
+                                    <td>67 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Travel & Tourism</strong>
+                                        <br><small class="text-muted">Local Travel Services</small>
+                                    </td>
+                                    <td>Book local cabs, rooms, and packages in one place</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>23 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Education & Coaching</strong>
+                                        <br><small class="text-muted">MET'S INSTITUTE OF MANAGEMENT</small>
+                                    </td>
+                                    <td>A hub for tutors, coaching, classes & materials</td>
+                                    <td><span class="badge bg-primary">Educational</span></td>
+                                    <td>34 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Plants & Gardening</strong>
+                                        <br><small class="text-muted">Gardening Marketplace</small>
+                                    </td>
+                                    <td>Gardening is trending - no OLX category exists for this</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>19 products</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Art, Collectibles & Antiques</strong>
+                                        <br><small class="text-muted">Vintage & Rare Items</small>
+                                    </td>
+                                    <td>Vintage, rare items need a home - OLX blocks most</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>56 products</td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td>
+                                        <strong>★ DIY & Handmade</strong>
+                                        <br><small class="text-muted">Indian Etsy - Local Crafts</small>
+                                    </td>
+                                    <td>Promote local craft & culture - Indian Etsy alternative</td>
+                                    <td><span class="badge bg-danger">Featured</span></td>
+                                    <td>89 products</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Statistics -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-database me-2"></i>Database Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-primary">{{ total_categories }}</h3>
+                                <p class="mb-0">Categories</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-success">{{ total_products }}</h3>
+                                <p class="mb-0">Products</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="border rounded p-3">
+                                <h3 class="text-warning">{{ total_users }}</h3>
+                                <p class="mb-0">Users</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6>Category Distribution</h6>
+                        {% for category in category_stats %}
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ category.name }}</span>
+                                <span class="text-muted">{{ category.product_count }} products</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ (category.product_count / total_products * 100) | round }}%">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Platform Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6>Top Performing Categories</h6>
+                        <div class="list-group">
+                            {% for top_category in top_categories %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ top_category.name }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ top_category.description }}</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ top_category.product_count }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6>Quick Actions</h6>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('admin.categories') }}" class="btn btn-outline-primary">
+                                <i class="fas fa-cog me-2"></i>Manage Categories
+                            </a>
+                            <a href="{{ url_for('add_special_category') }}" class="btn btn-outline-success">
+                                <i class="fas fa-plus me-2"></i>Add Special Category
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

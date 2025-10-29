@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Indian Marketplace{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Discover Unique Indian Products</h1>
+                <p class="lead mb-4">From homemade foods to industrial tools - your complete marketplace for everything OLX doesn't offer!</p>
+                {% if not current_user.is_authenticated %}
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Start Selling</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">Login</a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('add_product') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-plus me-2"></i>List Your Product
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-store display-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Unique Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Unique Categories</h2>
+        <p class="text-center text-muted mb-5">Categories designed specifically for Indian sellers and buyers</p>
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('products_by_category', category_id=category.id) }}" 
+                   class="category-card text-decoration-none">
+                    <div class="card h-100 hover-shadow border-{% if 'DIY' in category.name %}warning{% else %}light{% endif %}">
+                        <div class="card-body text-center p-4">
+                            {% if 'Food' in category.name %}
+                            <i class="fas fa-utensils text-success mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Tools' in category.name %}
+                            <i class="fas fa-tools text-info mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Events' in category.name %}
+                            <i class="fas fa-glass-cheers text-primary mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Industrial' in category.name %}
+                            <i class="fas fa-industry text-secondary mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Travel' in category.name %}
+                            <i class="fas fa-plane text-warning mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Education' in category.name %}
+                            <i class="fas fa-graduation-cap text-danger mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Plants' in category.name %}
+                            <i class="fas fa-leaf text-success mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'Art' in category.name %}
+                            <i class="fas fa-palette text-info mb-3" style="font-size: 2.5rem;"></i>
+                            {% elif 'DIY' in category.name %}
+                            <i class="fas fa-hands text-warning mb-3" style="font-size: 2.5rem;"></i>
+                            {% else %}
+                            <i class="fas fa-box text-primary mb-3" style="font-size: 2.5rem;"></i>
+                            {% endif %}
+                            
+                            <h5 class="card-title">
+                                {% if 'DIY' in category.name %}★ {% endif %}{{ category.name }}
+                                {% if 'DIY' in category.name %}
+                                <span class="badge bg-danger ms-2">Featured</span>
+                                {% endif %}
+                            </h5>
+                            <p class="card-text small text-muted">
+                                {{ category.description }}
+                            </p>
+                            <div class="mt-2">
+                                <span class="badge bg-light text-dark">
+                                    {{ category.products.count() }} products
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2>Featured Products</h2>
+            <a href="#" class="btn btn-outline-primary">View All Products</a>
+        </div>
+        
+        <div class="row g-4">
+            {% for product in products %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card product-card h-100 border-{% if 'DIY' in product.category.name %}warning{% else %}light{% endif %}">
+                    {% if product.image_url %}
+                    <img src="{{ url_for('static', filename=product.image_url) }}" 
+                         class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <!-- Category-specific placeholder -->
+                    <div class="card-img-top category-placeholder d-flex align-items-center justify-content-center text-white" 
+                         style="height: 200px; background: {% if 'Food' in product.category.name %}linear-gradient(135deg, #28a745, #20c997){% elif 'Tools' in product.category.name %}linear-gradient(135deg, #17a2b8, #6f42c1){% elif 'Events' in product.category.name %}linear-gradient(135deg, #007bff, #6610f2){% elif 'Industrial' in product.category.name %}linear-gradient(135deg, #6c757d, #495057){% elif 'Travel' in product.category.name %}linear-gradient(135deg, #fd7e14, #e83e8c){% elif 'Education' in product.category.name %}linear-gradient(135deg, #dc3545, #d63384){% elif 'Plants' in product.category.name %}linear-gradient(135deg, #20c997, #198754){% elif 'Art' in product.category.name %}linear-gradient(135deg, #6f42c1, #0dcaf0){% elif 'DIY' in product.category.name %}linear-gradient(135deg, #ffc107, #fd7e14){% else %}linear-gradient(135deg, #007bff, #0d6efd){% endif %}">
+                        <div class="text-center">
+                            {% if 'Food' in product.category.name %}
+                            <i class="fas fa-utensils fa-3x mb-2"></i>
+                            {% elif 'Tools' in product.category.name %}
+                            <i class="fas fa-tools fa-3x mb-2"></i>
+                            {% elif 'Events' in product.category.name %}
+                            <i class="fas fa-glass-cheers fa-3x mb-2"></i>
+                            {% elif 'Industrial' in product.category.name %}
+                            <i class="fas fa-industry fa-3x mb-2"></i>
+                            {% elif 'Travel' in product.category.name %}
+                            <i class="fas fa-plane fa-3x mb-2"></i>
+                            {% elif 'Education' in product.category.name %}
+                            <i class="fas fa-graduation-cap fa-3x mb-2"></i>
+                            {% elif 'Plants' in product.category.name %}
+                            <i class="fas fa-leaf fa-3x mb-2"></i>
+                            {% elif 'Art' in product.category.name %}
+                            <i class="fas fa-palette fa-3x mb-2"></i>
+                            {% elif 'DIY' in product.category.name %}
+                            <i class="fas fa-hands fa-3x mb-2"></i>
+                            {% else %}
+                            <i class="fas fa-box fa-3x mb-2"></i>
+                            {% endif %}
+                            <br>
+                            <small>{{ product.category.name }}</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">{{ product.name[:40] }}{% if product.name|length > 40 %}...{% endif %}</h6>
+                            {% if 'DIY' in product.category.name %}
+                            <span class="badge bg-warning text-dark">★ Featured</span>
+                            {% endif %}
+                        </div>
+                        <p class="card-text small text-muted flex-grow-1">
+                            {{ product.description[:70] }}{% if product.description|length > 70 %}...{% endif %}
+                        </p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+<span class="h5 text-primary mb-0">₹{{ "%.2f"|format(product.current_price) }}</span>
+                                <small class="text-muted">{{ product.bids.count() }} bids</small>
+                            </div>
+                            
+                            {% if product.time_remaining %}
+                            <div class="time-remaining small text-warning mb-3">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ product.time_remaining.days }}d {{ product.time_remaining.seconds//3600 }}h left
+                            </div>
+                            {% else %}
+                            <div class="time-remaining small text-danger mb-3">
+                                <i class="fas fa-clock me-1"></i>Auction ended
+                            </div>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('view_product', product_id=product.id) }}" 
+                               class="btn btn-primary btn-sm w-100">View Auction</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-store fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Welcome to Your Marketplace!</h4>
+                <p class="text-muted">Be the first to list your unique products in our specialized categories.</p>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('add_product') }}" class="btn btn-primary">List Your First Product</a>
+                {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Join as Seller</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose Our Platform?</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-ban fa-2x"></i>
+                </div>
+                <h5>No Restrictions</h5>
+                <p class="text-muted">List products that other platforms don't allow - tools, homemade foods, and more!</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-rupee-sign fa-2x"></i>
+                </div>
+                <h5>Indian Focus</h5>
+                <p class="text-muted">Categories designed specifically for Indian sellers and local businesses.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="bg-warning text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 80px; height: 80px;">
+                    <i class="fas fa-hands-helping fa-2x"></i>
+                </div>
+                <h5>Support Local</h5>
+                <p class="text-muted">Promote local artisans, home chefs, and small businesses across India.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

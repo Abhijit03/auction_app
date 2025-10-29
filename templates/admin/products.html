@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Products - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Manage Products</h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All Products</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>Seller</th>
+                            <th>Category</th>
+                            <th>Current Price</th>
+                            <th>Bids</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>
+                                <strong>{{ product.name }}</strong>
+                                {% if product.image_url %}
+                                <img src="{{ url_for('static', filename=product.image_url) }}" 
+                                     class="rounded ms-2" width="40" height="40" style="object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td>{{ product.seller.username }}</td>
+                            <td>{{ product.category.name }}</td>
+<td>₹{{ "%.2f"|format(product.current_price) }}</td>
+                            <td>{{ product.bids.count() }}</td>
+                            <td>
+                                {% if product.is_active %}
+                                <span class="badge bg-success">Active</span>
+                                {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('view_product', product_id=product.id) }}" 
+                                   class="btn btn-sm btn-outline-primary">View</a>
+                                <a href="{{ url_for('toggle_product', product_id=product.id) }}" 
+                                   class="btn btn-sm btn-{{ 'warning' if product.is_active else 'success' }}">
+                                   {{ 'Deactivate' if product.is_active else 'Activate' }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <i class="fas fa-box-open fa-2x text-muted mb-3"></i>
+                                <p class="text-muted">No products found.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
